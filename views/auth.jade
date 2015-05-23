@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1(align = 'center')= welcome_text
+  div(align = 'center', class = 'col-md-4 col-md-offset-4')
+    form(method='POST', action=act, role = 'form')
+      div(class='form-group')
+        label(for='login'). 
+          Имя
+        input(type='text', placeholder='Логин', class='form-control', name='login', id = 'login')
+      div(class='form-group')
+        label(for='password'). 
+          Пароль
+        input(type='password', placeholder='Пароль', class='form-control', name='password', id 'password')
+      div
+        input(type='submit', class='btn btn-default', value=button_text)
+    br
+    form(method='GET', action=redir id = 'redirect' align = 'center' height = 100)
+      input(type='submit', class='btn btn-default', value=redir_text) 

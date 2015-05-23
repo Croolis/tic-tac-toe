@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  form(method='GET', action='/logout' id = 'logout' align = 'right')
+    input(type='submit', class='btn btn-default', value='Выйти')  
+
+  h1(align = 'center')= welcome_text
