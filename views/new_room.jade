@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  form(method='GET', action='/logout' id = 'logout' align = 'right')
+    input(type='submit', class='btn btn-default', value='Выйти')  
+
+  div(align = 'center', class = 'col-md-4 col-md-offset-4')
+    form(method='POST', action='/addNewRoom', role = 'form')
+      div(class='form-group')
+        label(for='name'). 
+          Имя комнаты
+        input(type='text', placeholder='Имя', class='form-control', name='name', id='name')
+      div
+        input(type='submit', class='btn btn-default', value='Создать комнату')

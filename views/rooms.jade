@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  form(method='GET', action='/logout' id = 'logout' align = 'right')
+    input(type='submit', class='btn btn-default', value='Выйти')
+
+  div(class='container', style='background: #F7F7F7; border-radius: 25px')
+    table(id='rooms_list' class='table table-hover')
+      thead
+        tr
+          th.
+            Название комнаты
+          th.
+            Количество игроков
+          th.
+            ID комнаты
+      tbody
+        tr
+
+  script.
+    var rooms = '#{rooms}';
+    rooms = rooms.replace(new RegExp("&quot;", 'g'), '"');
+    rooms = JSON.parse(rooms);
+    var table = document.getElementById('rooms_list');
+    for (var i = 0; i < rooms.length; i++) {
+      var row = table.insertRow(i + 1);
+      if (rooms[i].players.length < 2)
+        row.onclick = function(click) {
+          console.log(click);
+          var form = document.createElement('form');
+          form.setAttribute('method', 'POST');
+          form.setAttribute('action', '/game');
+          var child = document.createElement('input');
+          child.setAttribute('type', 'hidden');
+          child.setAttribute('name', 'id');
+          child.setAttribute('value', click.path[1].cells[2].outerText);
+          form.appendChild(child);
+          form.submit();
+        };
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      cell2.style = 'visibility: hidden';
+      cell0.innerHTML = 'В комнате ' + rooms[i].players.length + ' из 2 игроков';
+      cell1.innerHTML = rooms[i].name;
+      cell2.innerHTML = rooms[i].id;      
+    }
+  br
+  form(method='GET', action='/createRoom' id = 'new_room' align = 'center')
+    input(type='submit', class='btn btn-default', value='Создать новую комнату')
