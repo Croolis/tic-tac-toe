@@ -6,11 +6,69 @@ var ws = require("nodejs-websocket");
 var ws_rooms = new Array();
 var room_code = 0;
 
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
+function Is_won(s_x, s_y, field) {
+  if ((field[s_x][s_y].filled == field[s_x][s_y + 2].filled) 
+    && (field[s_x][s_y + 1].filled == field[s_x][s_y + 2].filled) 
+    && (field[s_x][s_y + 2].filled != 0)) {
+    console.log(field[s_x][s_y].filled + ' ' + field[s_x][s_y + 1].filled + ' ' + field[s_x][s_y + 2].filled);
+    return field[s_x][s_y + 2].filled;
+  }
+  if ((field[s_x + 1][s_y].filled == field[s_x + 1][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 1].filled == field[s_x + 1][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 2].filled != 0)) {
+    console.log(field[s_x + 1][s_y].filled + ' ' + field[s_x + 1][s_y + 1].filled + ' ' + field[s_x + 1][s_y + 2].filled);
+    return field[s_x + 1][s_y + 2].filled;
+  }
+  if ((field[s_x + 2][s_y].filled == field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 2][s_y + 1].filled== field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 2][s_y + 2].filled != 0)) {
+    console.log(field[s_x + 2][s_y].filled + ' ' + field[s_x + 2][s_y + 1].filled + ' ' + field[s_x + 2][s_y + 2].filled);
+    return field[s_x + 2][s_y + 2].filled;
+  }
+  if ((field[s_x][s_y].filled == field[s_x + 2][s_y].filled) 
+    && (field[s_x + 1][s_y].filled== field[s_x + 2][s_y].filled) 
+    && (field[s_x + 2][s_y].filled != 0)) {
+    console.log(field[s_x][s_y].filled + ' ' + field[s_x + 1][s_y].filled + ' ' + field[s_x + 2][s_y].filled);
+    return field[s_x + 2][s_y].filled;
+  }
+  if ((field[s_x][s_y + 1].filled == field[s_x + 2][s_y + 1].filled) 
+    && (field[s_x + 1][s_y + 1].filled== field[s_x + 2][s_y + 1].filled) 
+    && (field[s_x + 2][s_y + 1].filled != 0)) {
+    console.log(field[s_x][s_y + 1].filled + ' ' + field[s_x + 2][s_y + 1].filled + ' ' + field[s_x + 1][s_y + 1].filled);
+    return field[s_x + 2][s_y + 1].filled;
+  }
+  if ((field[s_x][s_y + 2].filled == field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 2].filled== field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 2][s_y + 2].filled != 0)) {
+    console.log(field[s_x][s_y + 2].filled + ' ' + field[s_x + 1][s_y + 2].filled + ' ' + field[s_x + 1][s_y + 2].filled);
+    return field[s_x + 2][s_y + 2].filled;
+  }
+  if ((field[s_x][s_y].filled == field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 1].filled== field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 2][s_y + 2].filled != 0)) {
+    console.log(field[s_x][s_y].filled + ' ' + field[s_x + 1][s_y + 1].filled + ' ' + field[s_x + 2][s_y + 2].filled);
+    return field[s_x + 2][s_y + 2].filled;
+  }
+  if ((field[s_x + 2][s_y].filled == field[s_x][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 1].filled== field[s_x][s_y + 2].filled) 
+    && (field[s_x][s_y + 2].filled != 0)) {
+    console.log(field[s_x][s_y + 2].filled + ' ' + field[s_x + 1][s_y + 1].filled + ' ' + field[s_x + 2][s_y].filled);
+    return field[s_x][s_y + 2].filled;
+  }
+  flag = true;
+  for (var it1 = 0; it1 < 3; it1++)
+    for (var it2 = 0; it2 < 3; it2++)
+      if (field[s_x + it1][s_y + it2].filled == 0)
+        flag = false;
+  if (flag)
+    return 3;
+  else
+    return 0;
+}
+
+function Valid_rect(prev_x, prev_y, x, y) {
+  return (Math.floor(x / 3) == prev_x % 3) && (Math.floor(y / 3) == prev_y % 3);
+}
 
 var ws_handler = function(conn) {
   console.log('New connection');
@@ -20,7 +78,6 @@ var ws_handler = function(conn) {
     for (var i = 0; i < ws_rooms.length; i++)
       if (ws_rooms[i].id == resp.id)
         room = i;
-    console.log(room);
     if (resp.header == 'connected') {
       if (ws_rooms[room].players.length < 2) {
         var player = new Object();
@@ -29,23 +86,68 @@ var ws_handler = function(conn) {
             (ws_rooms[room].players.length == 1 && player != ws_rooms[room].players[0]))
           ws_rooms[room].players[ws_rooms[room].players.length] = player;
       }
-      //console.log(server.connections);
       if (ws_rooms[room].players.length == 2) {
-        console.log(ws_rooms[room]);
-        console.log(ws_rooms[room].players[1]);
         var msg = new Object();
+        ws_rooms[room].field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}]];
         msg.field = ws_rooms[room].field;
         msg.turn = ws_rooms[room].turn;
-        conn.sendText(JSON.stringify(msg));
         server.connections.forEach(function (conn) {
           if (conn.key == ws_rooms[room].players[0].key || 
               conn.key == ws_rooms[room].players[1].key)
-            conn.sendText(msg);
+            conn.sendText(JSON.stringify(msg));
         });
       }    
     }
+    if (resp.header == 'turn' && resp.x < 9 && resp.x >= 0 && resp.y < 9 && resp.y >= 0 &&
+        ws_rooms[room].field[resp.x][resp.y].filled == 0 && 
+        ws_rooms[room].field[resp.x][resp.y].won == 0) {
+      if ((conn.key == ws_rooms[room].players[0].key && ws_rooms[room].turn == 0) ||
+          (conn.key == ws_rooms[room].players[1].key && ws_rooms[room].turn == 1)) {
+        var t = Is_won(Math.floor(resp.x / 3) * 3, Math.floor(resp.y / 3) * 3, ws_rooms[room].field);
+        if ((ws_rooms[room].prev_x == -1) || 
+          (ws_rooms[room].field[ws_rooms[room].prev_x % 3][ws_rooms[room].prev_y % 3].won != 0) || 
+          (Valid_rect(ws_rooms[room].prev_x, ws_rooms[room].prev_y, resp.x, resp.y))) {
+          ws_rooms[room].field[resp.x][resp.y].filled = ws_rooms[room].turn + 1;
+            for (var it1 = 0; it1 < 3; it1++)
+              for (var it2 = 0; it2 < 3; it2++)
+                ws_rooms[room].field[Math.floor(resp.x / 3) * 3 + it1][Math.floor(resp.y / 3) * 3 + it2].won = t;
+          ws_rooms[room].turn = (ws_rooms[room].turn + 1) % 2;
+          ws_rooms[room].prev_x = resp.x;
+          ws_rooms[room].prev_y = resp.y;
+          var msg = new Object();
+          msg.header = 'turn';
+          msg.field = ws_rooms[room].field;
+          msg.turn = ws_rooms[room].turn;
+          server.connections.forEach(function (conn) {
+            if (conn.key == ws_rooms[room].players[0].key || 
+                conn.key == ws_rooms[room].players[1].key)
+              conn.sendText(JSON.stringify(msg));
+          });
+        }
+      }
+    }
   });
   conn.on('close', function (code, reason) {
+    console.log(code);
+    console.log(reason);
+    for (var i = 0; i < ws_rooms.length; i++) {
+      if (ws_rooms[i].players.length == 0)
+        continue;
+      if (ws_rooms[i].players.length == 1)
+        if (conn.key == ws_rooms[i].players[0].key) {
+          ws_rooms[i].players = new Array();
+        }
+      if (ws_rooms[i].players.length == 2) {
+        if (conn.key == ws_rooms[i].players[1].key) {
+          ws_rooms[i].field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}]];
+          ws_rooms[i].players.splice(1, 2);
+        }
+        if (conn.key == ws_rooms[i].players[0].key) {
+          ws_rooms[i].field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}]];
+          ws_rooms[i].players.splice(0, 1);
+        }
+      }
+    }
     console.log('Connection closed');
   });
 };
@@ -56,7 +158,6 @@ router.get('/rooms', function(req, res, next) {
   if (!req.signedCookies.login) {
     res.redirect('/');
   } else {
-    console.log(JSON.stringify(ws_rooms));
     res.render('rooms', { title: 'Список комнат', rooms: JSON.stringify(ws_rooms) });
   }
 });
@@ -69,9 +170,11 @@ router.post('/addNewRoom', function(req, res, next) {
   room = new Object();
   room.name = req.body.name;
   room.players = new Array();
-  room.field = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+  room.field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
   room.id = room_code;
   room.turn = 0;
+  room.prev_x = -1;
+  room.prev_y = -1;
   room_code++;
   ws_rooms[ws_rooms.length] = room;
   res.redirect('/rooms');
@@ -82,7 +185,6 @@ router.post('/game', function(req, res, next) {
   for (var i = 0; i < ws_rooms.length; i++)
     if (ws_rooms[i].id == req.body.id)
       room_number = i;
-  console.log(room_number);
   if (ws_rooms[room_number].players.length < 2)
     res.render('game', { title: 'Комната ' + ws_rooms[room_number].name, id : ws_rooms[room_number].id});
   else
