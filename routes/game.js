@@ -11,49 +11,49 @@ function Is_won(s_x, s_y, field) {
     && (field[s_x][s_y + 1].filled == field[s_x][s_y + 2].filled) 
     && (field[s_x][s_y + 2].filled != 0)) {
     console.log(field[s_x][s_y].filled + ' ' + field[s_x][s_y + 1].filled + ' ' + field[s_x][s_y + 2].filled);
-    return field[s_x][s_y + 2].filled;
+    return field[s_x][s_y + 2].filled + 1;
   }
   if ((field[s_x + 1][s_y].filled == field[s_x + 1][s_y + 2].filled) 
     && (field[s_x + 1][s_y + 1].filled == field[s_x + 1][s_y + 2].filled) 
     && (field[s_x + 1][s_y + 2].filled != 0)) {
     console.log(field[s_x + 1][s_y].filled + ' ' + field[s_x + 1][s_y + 1].filled + ' ' + field[s_x + 1][s_y + 2].filled);
-    return field[s_x + 1][s_y + 2].filled;
+    return field[s_x + 1][s_y + 2].filled + 1;
   }
   if ((field[s_x + 2][s_y].filled == field[s_x + 2][s_y + 2].filled) 
-    && (field[s_x + 2][s_y + 1].filled== field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 2][s_y + 1].filled == field[s_x + 2][s_y + 2].filled) 
     && (field[s_x + 2][s_y + 2].filled != 0)) {
     console.log(field[s_x + 2][s_y].filled + ' ' + field[s_x + 2][s_y + 1].filled + ' ' + field[s_x + 2][s_y + 2].filled);
-    return field[s_x + 2][s_y + 2].filled;
+    return field[s_x + 2][s_y + 2].filled + 1;
   }
   if ((field[s_x][s_y].filled == field[s_x + 2][s_y].filled) 
-    && (field[s_x + 1][s_y].filled== field[s_x + 2][s_y].filled) 
+    && (field[s_x + 1][s_y].filled == field[s_x + 2][s_y].filled) 
     && (field[s_x + 2][s_y].filled != 0)) {
     console.log(field[s_x][s_y].filled + ' ' + field[s_x + 1][s_y].filled + ' ' + field[s_x + 2][s_y].filled);
-    return field[s_x + 2][s_y].filled;
+    return field[s_x + 2][s_y].filled + 1;
   }
   if ((field[s_x][s_y + 1].filled == field[s_x + 2][s_y + 1].filled) 
-    && (field[s_x + 1][s_y + 1].filled== field[s_x + 2][s_y + 1].filled) 
+    && (field[s_x + 1][s_y + 1].filled == field[s_x + 2][s_y + 1].filled) 
     && (field[s_x + 2][s_y + 1].filled != 0)) {
     console.log(field[s_x][s_y + 1].filled + ' ' + field[s_x + 2][s_y + 1].filled + ' ' + field[s_x + 1][s_y + 1].filled);
-    return field[s_x + 2][s_y + 1].filled;
+    return field[s_x + 2][s_y + 1].filled + 1;
   }
   if ((field[s_x][s_y + 2].filled == field[s_x + 2][s_y + 2].filled) 
-    && (field[s_x + 1][s_y + 2].filled== field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 2].filled == field[s_x + 2][s_y + 2].filled) 
     && (field[s_x + 2][s_y + 2].filled != 0)) {
     console.log(field[s_x][s_y + 2].filled + ' ' + field[s_x + 1][s_y + 2].filled + ' ' + field[s_x + 1][s_y + 2].filled);
-    return field[s_x + 2][s_y + 2].filled;
+    return field[s_x + 2][s_y + 2].filled + 1;
   }
   if ((field[s_x][s_y].filled == field[s_x + 2][s_y + 2].filled) 
-    && (field[s_x + 1][s_y + 1].filled== field[s_x + 2][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 1].filled == field[s_x + 2][s_y + 2].filled) 
     && (field[s_x + 2][s_y + 2].filled != 0)) {
     console.log(field[s_x][s_y].filled + ' ' + field[s_x + 1][s_y + 1].filled + ' ' + field[s_x + 2][s_y + 2].filled);
-    return field[s_x + 2][s_y + 2].filled;
+    return field[s_x + 2][s_y + 2].filled + 1;
   }
   if ((field[s_x + 2][s_y].filled == field[s_x][s_y + 2].filled) 
-    && (field[s_x + 1][s_y + 1].filled== field[s_x][s_y + 2].filled) 
+    && (field[s_x + 1][s_y + 1].filled == field[s_x][s_y + 2].filled) 
     && (field[s_x][s_y + 2].filled != 0)) {
     console.log(field[s_x][s_y + 2].filled + ' ' + field[s_x + 1][s_y + 1].filled + ' ' + field[s_x + 2][s_y].filled);
-    return field[s_x][s_y + 2].filled;
+    return field[s_x][s_y + 2].filled + 1;
   }
   flag = true;
   for (var it1 = 0; it1 < 3; it1++)
@@ -61,7 +61,51 @@ function Is_won(s_x, s_y, field) {
       if (field[s_x + it1][s_y + it2].filled == 0)
         flag = false;
   if (flag)
-    return 3;
+    return 1;
+  else
+    return 0;
+}
+
+function Is_g_won(field) {
+  if (field[0][0].win == field[0][3].win &&
+      field[0][0].win == field[0][6].win &&
+      field[0][0].win > 1)
+    return field[0][0].win;
+  if (field[3][0].win == field[3][3].win &&
+      field[3][0].win == field[3][6].win &&
+      field[3][0].win > 1)
+    return field[3][0].win;
+  if (field[6][0].win == field[6][3].win &&
+      field[6][0].win == field[6][6].win &&
+      field[6][0].win > 1)
+    return field[6][0].win;
+  if (field[0][0].win == field[3][0].win &&
+      field[0][0].win == field[6][0].win &&
+      field[0][0].win > 1)
+    return field[0][0].win;
+  if (field[0][3].win == field[3][3].win &&
+      field[0][3].win == field[6][3].win &&
+      field[0][3].win > 1)
+    return field[0][3].win;
+  if (field[0][6].win == field[3][6].win &&
+      field[0][6].win == field[6][6].win &&
+      field[0][6].win > 1)
+    return field[0][6].win;
+  if (field[0][0].win == field[3][3].win &&
+      field[0][0].win == field[6][6].win &&
+      field[0][0].win > 1)
+    return field[0][0].win;
+  if (field[0][6].win == field[3][3].win &&
+      field[0][6].win == field[6][0].win &&
+      field[0][6].win > 1)
+    return field[0][6].win;
+  var f = true;
+  for (var i = 0; i < 9; i++)
+    for (var j = 0; j < 9; j++)
+      if (field[i][j].filled == 0)
+        f = false;
+  if (f)
+    return 1;
   else
     return 0;
 }
@@ -89,6 +133,8 @@ var ws_handler = function(conn) {
       if (ws_rooms[room].players.length == 2) {
         var msg = new Object();
         ws_rooms[room].field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}]];
+        ws_rooms[room].prev_x = -1;
+        msg.endgame = 'no';
         msg.field = ws_rooms[room].field;
         msg.turn = ws_rooms[room].turn;
         server.connections.forEach(function (conn) {
@@ -103,18 +149,28 @@ var ws_handler = function(conn) {
         ws_rooms[room].field[resp.x][resp.y].won == 0) {
       if ((conn.key == ws_rooms[room].players[0].key && ws_rooms[room].turn == 0) ||
           (conn.key == ws_rooms[room].players[1].key && ws_rooms[room].turn == 1)) {
-        var t = Is_won(Math.floor(resp.x / 3) * 3, Math.floor(resp.y / 3) * 3, ws_rooms[room].field);
-        if ((ws_rooms[room].prev_x == -1) || 
-          (ws_rooms[room].field[ws_rooms[room].prev_x % 3][ws_rooms[room].prev_y % 3].won != 0) || 
-          (Valid_rect(ws_rooms[room].prev_x, ws_rooms[room].prev_y, resp.x, resp.y))) {
+        if (ws_rooms[room].prev_x == -1 || 
+          ws_rooms[room].field[ws_rooms[room].prev_x % 3][ws_rooms[room].prev_y % 3].won != 0 || 
+          Valid_rect(ws_rooms[room].prev_x, ws_rooms[room].prev_y, resp.x, resp.y)) {
           ws_rooms[room].field[resp.x][resp.y].filled = ws_rooms[room].turn + 1;
+          var t = Is_won(Math.floor(resp.x / 3) * 3, Math.floor(resp.y / 3) * 3, ws_rooms[room].field);
             for (var it1 = 0; it1 < 3; it1++)
               for (var it2 = 0; it2 < 3; it2++)
-                ws_rooms[room].field[Math.floor(resp.x / 3) * 3 + it1][Math.floor(resp.y / 3) * 3 + it2].won = t;
+                ws_rooms[room].field[Math.floor(resp.x / 3) * 3 + it1][Math.floor(resp.y / 3) * 3 + it2].won = t;     
           ws_rooms[room].turn = (ws_rooms[room].turn + 1) % 2;
           ws_rooms[room].prev_x = resp.x;
           ws_rooms[room].prev_y = resp.y;
           var msg = new Object();
+          msg.endgame = 'no';
+          if (t != 0){
+            t = Is_g_won(ws_rooms[room].field);
+            if (t == 1)
+              msg.endgame = 'tie';
+            if (t == 2)
+              msg.endgame = 'tic';
+            if (t == 3)
+              msg.endgame = 'tac';
+          }     
           msg.header = 'turn';
           msg.field = ws_rooms[room].field;
           msg.turn = ws_rooms[room].turn;
@@ -140,11 +196,25 @@ var ws_handler = function(conn) {
       if (ws_rooms[i].players.length == 2) {
         if (conn.key == ws_rooms[i].players[1].key) {
           ws_rooms[i].field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}]];
+          ws_rooms[i].prev_x = -1;          
           ws_rooms[i].players.splice(1, 2);
+          var msg = new Object();
+          msg.endgame = 'leave';
+          server.connections.forEach(function (conn) {
+          if (conn.key == ws_rooms[i].players[0].key)
+            conn.sendText(JSON.stringify(msg));
+          });
         }
         if (conn.key == ws_rooms[i].players[0].key) {
           ws_rooms[i].field = [[{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}], [{"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}, {"filled" : 0, "won" : 0}]];
+          ws_rooms[i].prev_x = -1;
           ws_rooms[i].players.splice(0, 1);
+          var msg = new Object();
+          msg.endgame = 'leave';
+          server.connections.forEach(function (conn) {
+          if (conn.key == ws_rooms[i].players[0].key)
+            conn.sendText(JSON.stringify(msg));
+          });
         }
       }
     }
@@ -153,6 +223,9 @@ var ws_handler = function(conn) {
 };
 
 var server = ws.createServer(ws_handler).listen(3001);
+var WebSocketServer = require("ws").Server;
+var wss = new WebSocketServer({server: server});
+wss.on("connection", ws_handler)
 
 router.get('/rooms', function(req, res, next) {
   if (!req.signedCookies.login) {

@@ -1,14 +1,15 @@
 extends layout
 
 block content
+  form(method='GET', action='/rooms' id = 'logout' align = 'right')
+    input(type='submit', class='btn btn-default', value='Покинуть игру')
   form(method='GET', action='/logout' id = 'logout' align = 'right')
     input(type='submit', class='btn btn-default', value='Выйти')
 
   script.
-    var socket = new WebSocket('ws://localhost:3001');
-
+    var host = location.origin.replace(/^http/, 'ws')
+    var socket = new WebSocket(host);
     socket.onopen = function() {
-      console.log('pip');
       var response = new Object();
       response.header = 'connected';
       response.id = #{id};
@@ -29,6 +30,7 @@ block content
       socket.send(JSON.stringify(msg));
     }
 
+  div(id='smth')
 
   div(id='tic' style='display: none')
     img(src='data:image/jpg;base64,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')
@@ -152,23 +154,38 @@ block content
     socket.onmessage = function(event) {
       var data = JSON.parse(event.data);
       var field = data.field;
-      for (var i = 1; i < 10; i++)
-        for (var j = 1; j < 10; j++) {
-          if (field[i - 1][j - 1].won == 0) {
-            if (field[i - 1][j - 1].filled == 0)
-              document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('toe').innerHTML;
-            if (field[i - 1][j - 1].filled == 1)
-              document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('tic').innerHTML;
-            if (field[i - 1][j - 1].filled == 2)
-              document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('tac').innerHTML;
+      console.log(data);
+      if (data.endgame == 'no')
+        for (var i = 1; i < 10; i++)
+          for (var j = 1; j < 10; j++) {
+            if (field[i - 1][j - 1].won == 0) {
+              if (field[i - 1][j - 1].filled == 0)
+                document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('toe').innerHTML;
+              if (field[i - 1][j - 1].filled == 1)
+                document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('tic').innerHTML;
+              if (field[i - 1][j - 1].filled == 2)
+                document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('tac').innerHTML;
+            }
+            if (field[i - 1][j - 1].won == 2) {
+                document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('win1').innerHTML;
+            }
+            if (field[i - 1][j - 1].won == 3) {
+                document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('win2').innerHTML;
+            }
           }
-          if (field[i - 1][j - 1].won == 1) {
-              document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('win1').innerHTML;
-          }
-          if (field[i - 1][j - 1].won == 2) {
-              document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('win2').innerHTML;
-          }
-        }
+      else {
+        for (var i = 1; i < 10; i++)
+          for (var j = 1; j < 10; j++)
+            document.getElementById(i.toString() + j.toString()).innerHTML = '';
+        if (data.endgame == 'leave')
+          document.getElementById('smth').innerHTML = 'Ваш товарищ ливнул, ожидайте другого';
+        if (data.endgame == 'tie')
+          document.getElementById('smth').innerHTML = 'Ничья';
+        if (data.endgame == 'tic')
+          document.getElementById('smth').innerHTML = 'Победили крестики';
+        if (data.endgame == 'tac')
+          document.getElementById('smth').innerHTML = 'Победили нолики';
+      }
     };
 
     socket.onerror = function(error) {

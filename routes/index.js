@@ -7,7 +7,8 @@ var accountShema = mongoose.Schema({
     password: String
 })
 var Account = mongoose.model('Account', accountShema);
-mongoose.connect('mongodb://localhost/test');
+//mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://<1>:<1>@ds031982.mongolab.com:31982/xoxo-db');
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 
 /* GET home page. */
