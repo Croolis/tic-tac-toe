@@ -222,10 +222,25 @@ var ws_handler = function(conn) {
   });
 };
 
-var server = ws.createServer(ws_handler).listen(3001);
+/*var server = ws.createServer(ws_handler).listen(3001);
 var WebSocketServer = require("ws").Server;
 var wss = new WebSocketServer({server: server});
-wss.on("connection", ws_handler)
+wss.on("connection", ws_handler)*/
+
+var wss = new WebSocketServer({server: server})
+console.log("websocket server created")
+
+wss.on("connection", function(ws) {
+  var id = setInterval(function() {
+    ws.send(JSON.stringify(new Date()), function() {  })
+  }, 1000)
+
+  console.log("websocket connection open")
+
+  ws.on("close", function() {
+    console.log("websocket connection close")
+  })
+})
 
 router.get('/rooms', function(req, res, next) {
   if (!req.signedCookies.login) {

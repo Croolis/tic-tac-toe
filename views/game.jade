@@ -8,6 +8,11 @@ block content
 
   script.
     var host = location.origin.replace(/^http/, 'ws')
+    var ws = new WebSocket(host);
+    ws.onmessage = function (event) {
+      console.log('yup');
+    };
+    /*var host = location.origin.replace(/^http/, 'ws')
     var socket = new WebSocket(host);
     socket.onopen = function() {
       var response = new Object();
@@ -19,7 +24,7 @@ block content
     window.onbeforeunload = function() {
         socket.onclose = function () {};
         socket.close();
-    };
+    };*/
 
     function make_turn(x, y) {
       var msg = new Object();
@@ -143,7 +148,7 @@ block content
 
   script.
 
-    socket.onclose = function(event) {
+    /*socket.onclose = function(event) {
       if (event.wasClean) {
         alert('Соединение закрыто чисто');
       }
@@ -190,4 +195,4 @@ block content
 
     socket.onerror = function(error) {
       alert("Ошибка " + error.message);
-    };
+    };*/
