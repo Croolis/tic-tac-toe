@@ -13,6 +13,7 @@
     "jade": "~1.9.2",
     "passport": "*",
     "passport-local": "*",
+    "mongoose": "^3.8.25",
     "nconf": "*",
     "connect-flash": "*",
     "connect-memcached": "*",
