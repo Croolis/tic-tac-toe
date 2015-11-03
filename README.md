@@ -1,2 +1,4 @@
 # XOXOXO
-Самбуров Алексей, группа 108
+Samburov Aleksei
+
+"tic-tac-toe" game.
