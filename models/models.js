@@ -13,8 +13,8 @@ var Model = function() {
   })
 
   var Account = mongoose.model('Account', accountShema);
-  mongoose.connect('mongodb://localhost/test');
-  //mongoose.connect('mongodb://1:1@ds031842.mongolab.com:31842/xoxo');
+  //mongoose.connect('mongodb://localhost/test');
+  mongoose.connect('mongodb://1:1@ds031842.mongolab.com:31842/xoxo');
   mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 
   this.Auth = function(req, res, next) {
