@@ -18,6 +18,19 @@ block content
         tr
 
   script.
+    var set_onclick = function(row, rooms, i) {
+      row.onclick = function(click) {
+        var form = document.createElement('form');
+        form.setAttribute('method', 'POST');
+        form.setAttribute('action', '/game');
+        var child = document.createElement('input');
+        child.setAttribute('type', 'hidden');
+        child.setAttribute('name', 'id');
+        child.setAttribute('value', rooms[i].id);
+        form.appendChild(child);
+        form.submit();
+      }
+    }
     var rooms = '#{rooms}';
     rooms = rooms.replace(new RegExp("&quot;", 'g'), '"');
     rooms = JSON.parse(rooms);
@@ -25,19 +38,9 @@ block content
     for (var i = 0; i < rooms.length; i++) {
       var row = table.insertRow(i + 1);
       if (rooms[i].players.length < 2)
-        row.onclick = function(click) {
-          console.log(click);
-          var form = document.createElement('form');
-          form.setAttribute('method', 'POST');
-          form.setAttribute('action', '/game');
-          var child = document.createElement('input');
-          child.setAttribute('type', 'hidden');
-          child.setAttribute('name', 'id');
-          child.setAttribute('value', click.path[1].cells[2].outerText);
-          form.appendChild(child);
-          form.submit();
-        };
+        set_onclick(row, rooms, i);
       var cell0 = row.insertCell(0);
+      console.log(table);
       var cell1 = row.insertCell(1);
       var cell2 = row.insertCell(2);
       cell2.style = 'visibility: hidden';
