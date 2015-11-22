@@ -6,25 +6,22 @@ block content
   form(method='GET', action='/logout' id = 'logout' align = 'right')
     input(type='submit', class='btn btn-default', value='Выйти')
 
+  script(src="socket.io.js")
+
   script.
-    var host = location.origin.replace(/^http/, 'ws')
-    var ws = new WebSocket(host);
-    ws.onmessage = function (event) {
-      console.log('yup');
-    };
-    /*var host = location.origin.replace(/^http/, 'ws')
-    var socket = new WebSocket(host);
-    socket.onopen = function() {
+    var socket = io();
+    
+    socket.on('connect', function() {
       var response = new Object();
       response.header = 'connected';
       response.id = #{id};
-      socket.send(JSON.stringify(response));
-    };
+      socket.emit('connected', JSON.stringify(response));
+    });
 
     window.onbeforeunload = function() {
-        socket.onclose = function () {};
+        //socket.onclose = function () {};
         socket.close();
-    };*/
+    };
 
     function make_turn(x, y) {
       var msg = new Object();
@@ -32,7 +29,7 @@ block content
       msg.y = y - 1;
       msg.id = #{id};
       msg.header = 'turn';
-      socket.send(JSON.stringify(msg));
+      socket.emit('turn', JSON.stringify(msg));
     }
 
   div(id='smth')
@@ -154,10 +151,10 @@ block content
       }
       console.log(event);
       console.log('Код: ' + event.code + ' причина: ' + event.reason);
-    };
+    };*/
 
-    socket.onmessage = function(event) {
-      var data = JSON.parse(event.data);
+    socket.on('turn' ,function(msg) {
+      var data = JSON.parse(msg);
       var field = data.field;
       console.log(data);
       if (data.endgame == 'no')
@@ -191,8 +188,8 @@ block content
         if (data.endgame == 'tac')
           document.getElementById('smth').innerHTML = 'Победили нолики';
       }
-    };
+    });
 
-    socket.onerror = function(error) {
+    socket.on('error', function(error) {
       alert("Ошибка " + error.message);
-    };*/
+    });

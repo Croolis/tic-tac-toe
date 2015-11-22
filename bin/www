@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('xoxo:server');
-var http = require('http');
+var io_func = require('../models/game');
 
 /**
  * Get port from environment and store in Express.
@@ -19,15 +19,18 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var http = require('http').Server(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+http.listen(port, function(){
+  console.log('listening on *:3000');
+});
+
+http.on('error', onError);
+http.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -82,9 +85,27 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
+  var addr = http.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-}
+} 
+
+/**
+ * Event listeners for Socket.io server.
+ */
+
+var io = require('socket.io')(http);
+var t_game = require('../models/game');
+var game = new t_game();
+
+io.on('connection', function(socket) {
+  socket.on('connected', function(msg) {
+    game.OnConnected(io, socket, msg);
+  });
+
+  socket.on('turn', function(msg) {
+    game.OnTurn(io, socket, msg);
+  });
+});

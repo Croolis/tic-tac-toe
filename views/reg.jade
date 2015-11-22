@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1(align = 'center')= welcome_text
+  div(align = 'center', class = 'col-md-4 col-md-offset-4')
+    form(method='POST', action='/reg', role = 'form')
+      div(class='form-group')
+        label(for='login'). 
+          Имя
+        input(type='text', placeholder='Логин', class='form-control', name='login', id='login')
+      div(class='form-group')
+        label(for='password'). 
+          Пароль
+        input(type='password', placeholder='Пароль', class='form-control', name='password', id='password')
+      div(class='form-group')
+        label(for='repeat_password'). 
+          Повторите пароль
+        input(type='password', placeholder='Пароль', class='form-control', name='repeat_password', id='repeat_password')
+      div
+        input(type='submit', class='btn btn-default', value='Зарегистрироваться')
+    br
+    form(method='GET', action='/' id = 'redirect' align = 'center' height = 100)
+      input(type='submit', class='btn btn-default', value='К авторизации') 
