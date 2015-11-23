@@ -20,6 +20,10 @@ block content
 
     window.onbeforeunload = function() {
         //socket.onclose = function () {};
+        var response = new Object();
+        response.header = 'close';
+        response.id = #{id};
+        socket.emit('close', JSON.stringify(response));
         socket.close();
     };
 

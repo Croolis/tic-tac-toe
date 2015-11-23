@@ -108,4 +108,8 @@ io.on('connection', function(socket) {
   socket.on('turn', function(msg) {
     game.OnTurn(io, socket, msg);
   });
+
+  socket.on('close', function(msg) {
+    game.OnClose(io, socket, msg);
+  })
 });
