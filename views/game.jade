@@ -19,12 +19,12 @@ block content
     });
 
     window.onbeforeunload = function() {
-        //socket.onclose = function () {};
-        var response = new Object();
-        response.header = 'close';
-        response.id = #{id};
-        socket.emit('close', JSON.stringify(response));
-        socket.close();
+      console.log("HI");
+      var response = new Object();
+      response.header = 'close';
+      response.id = #{id};
+      socket.emit('close', JSON.stringify(response));
+      socket.close();
     };
 
     function make_turn(x, y) {
@@ -149,19 +149,12 @@ block content
 
   script.
 
-    /*socket.onclose = function(event) {
-      if (event.wasClean) {
-        alert('Соединение закрыто чисто');
-      }
-      console.log(event);
-      console.log('Код: ' + event.code + ' причина: ' + event.reason);
-    };*/
-
     socket.on('turn' ,function(msg) {
       var data = JSON.parse(msg);
-      var field = data.field;
       console.log(data);
-      if (data.endgame == 'no')
+      var field = data.field;
+      if (data.endgame == 'no') {
+        document.getElementById('smth').innerHTML = '';
         for (var i = 1; i < 10; i++)
           for (var j = 1; j < 10; j++) {
             if (field[i - 1][j - 1].won == 0) {
@@ -179,12 +172,13 @@ block content
                 document.getElementById(i.toString() + j.toString()).innerHTML = document.getElementById('win2').innerHTML;
             }
           }
+      }
       else {
         for (var i = 1; i < 10; i++)
           for (var j = 1; j < 10; j++)
             document.getElementById(i.toString() + j.toString()).innerHTML = '';
         if (data.endgame == 'leave')
-          document.getElementById('smth').innerHTML = 'Ваш товарищ ливнул, ожидайте другого';
+          document.getElementById('smth').innerHTML = 'Ваш товарищ покинул комнату, ожидайте другого или также покиньте комнату';
         if (data.endgame == 'tie')
           document.getElementById('smth').innerHTML = 'Ничья';
         if (data.endgame == 'tic')
