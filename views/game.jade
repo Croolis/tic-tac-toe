@@ -148,6 +148,7 @@ block content
       td(id="99" onclick="make_turn(9, 9)")
 
   script.
+    document.getElementById('smth').innerHTML = 'Ожидайте подключения второго игрока';
 
     socket.on('turn' ,function(msg) {
       var data = JSON.parse(msg);
